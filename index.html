@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Certification Info</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- 구글 폰트 적용 (Outfit & Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <main class="container">
+    <header class="header">
+      <div class="product-info">
+        <h1>Product Certification Info</h1>
+        <div id="product-details" class="product-details">
+          <!-- JavaScript로 동적 삽입됨 -->
+          <div class="skeleton-text line-1"></div>
+          <div class="skeleton-text line-2"></div>
+        </div>
+      </div>
+      <div class="logo-area">
+        <img src="bluetooth_logo_icon_128x.png" alt="Bluetooth Logo" class="bluetooth-logo" id="bluetooth-logo-img" />
+      </div>
+    </header>
+
+    <section class="table-container">
+      <table id="info-table">
+        <thead>
+          <tr>
+            <th>Certification No</th>
+            <th>Logo</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <!-- JavaScript로 동적 삽입됨 -->
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2026 TIX Inc. All rights reserved.</p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

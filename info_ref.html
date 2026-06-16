@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Product Certification Info</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      h1 {
+        margin-bottom: 0.5rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+        color: #333;
+        margin-top: 0;
+        line-height: 1.5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 1rem;
+      }
+      td,
+      th {
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        vertical-align: middle;
+        text-align: center;
+      }
+      td img {
+        max-height: 50px;
+        max-width: 120px;
+        display: block;
+        margin: auto;
+      }
+      th {
+        background-color: #f5f5f5;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Product Certification Info</h1>
+    <div class="subtitle" id="subtitle">
+      <div id="product-text"></div>
+      <img
+        src="../bluetooth_logo_icon_128x.png"
+        alt="Bluetooth Logo"
+        style="height: 68px"
+      />
+    </div>
+
+    <table id="info-table">
+      <tr>
+        <th>Certification No</th>
+        <th>Logo</th>
+      </tr>
+    </table>
+
+    <script>
+      // 외부 JSON 파일(data.json) 읽기
+      fetch("data.json")
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to load JSON");
+          return res.json();
+        })
+        .then((data) => {
+          const item = data["ProductCertificationInfo"];
+          if (!item || !item.certificationInfos || !item.certificationLogos) {
+            throw new Error("Missing data in JSON");
+          }
+
+          // Name & Model No 표시
+          const textBox = document.getElementById("product-text");
+          textBox.innerHTML = `
+            <strong>Name:</strong> ${item.name || "-"}<br>
+            <strong>Model No:</strong> ${item.model || "-"}
+          `;
+
+          // 인증 정보 테이블에 추가
+          const table = document.getElementById("info-table");
+          const certInfos = item.certificationInfos;
+          const logos = item.certificationLogos;
+
+          for (let i = 0; i < certInfos.length; i++) {
+            const certInfo = certInfos[i] || "-";
+
+            // 로고 문자열 (파일명 + 확장자 기대)
+            const raw = logos[i] ?? "";
+            const logoFileRaw = raw.toString().trim();
+
+            const row = document.createElement("tr");
+
+            const tdCert = document.createElement("td");
+            tdCert.textContent = certInfo;
+
+            const tdImage = document.createElement("td");
+
+            if (!logoFileRaw || logoFileRaw === "-") {
+              // "-" 또는 빈 값 → 로고 없음
+              tdImage.textContent = "-";
+            } else {
+              // 확장자까지 포함된 파일명 사용 (예: kc.png / kc.jpg)
+              const img = document.createElement("img");
+              img.src = "images/" + logoFileRaw;
+              img.alt = certInfo;
+
+              // 파일이 없으면 깨진 이미지 대신 "-" 표시
+              img.onerror = () => {
+                tdImage.textContent = "-";
+                if (img.parentNode) {
+                  tdImage.remove();
+                }
+              };
+
+              tdImage.appendChild(img);
+            }
+
+            row.appendChild(tdCert);
+            row.appendChild(tdImage);
+            table.appendChild(row);
+          }
+
+          // ✅ 모든 행 높이 동일하게 맞춤
+          function setUniformRowHeight() {
+            const rows = table.querySelectorAll("tr");
+            let maxHeight = 0;
+            rows.forEach((row) => {
+              row.style.height = "auto"; // 초기화
+              const h = row.offsetHeight;
+              if (h > maxHeight) maxHeight = h;
+            });
+            rows.forEach((row) => (row.style.height = maxHeight + "px"));
+          }
+
+          // 이미지 로딩 후 높이 계산
+          const imgs = table.querySelectorAll("img");
+          let loadedCount = 0;
+
+          if (imgs.length === 0) {
+            setUniformRowHeight();
+          } else {
+            imgs.forEach((img) => {
+              const done = () => {
+                loadedCount++;
+                if (loadedCount === imgs.length) {
+                  setUniformRowHeight();
+                }
+              };
+              img.onload = done;
+              img.onerror = done;
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          const row = document.createElement("tr");
+          row.innerHTML = "<td colspan='2'>Failed to load data.</td>";
+          document.getElementById("info-table").appendChild(row);
+        });
+    </script>
+  </body>
+</html>
