@@ -15,10 +15,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // 1. 제품 및 모델명 정보 바인딩
+      const model = (item.model || "").toString().trim();
+      const modelLine =
+        model && model !== "-"
+          ? `<br><strong>Model No:</strong> ${model}`
+          : "";
       detailsBox.innerHTML = `
-        <strong>Name:</strong> ${item.name || "-"}<br>
-        <strong>Model No:</strong> ${item.model || "-"}
+        <div class="product-name-row">
+          <strong>Name:</strong>
+          <span class="product-name"></span>
+        </div>${modelLine}
       `;
+      detailsBox.querySelector(".product-name").textContent = item.name || "-";
 
       // 2. 테이블 데이터 채우기
       tableBody.innerHTML = ""; // 기존 스켈레톤/비어있음 영역 제거

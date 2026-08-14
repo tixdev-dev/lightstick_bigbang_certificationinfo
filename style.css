@@ -72,6 +72,16 @@ body {
   font-weight: 600;
 }
 
+.product-name-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4em;
+}
+
+.product-name {
+  white-space: pre-line;
+}
+
 .logo-area {
   flex-shrink: 0;
   margin-left: 16px;
