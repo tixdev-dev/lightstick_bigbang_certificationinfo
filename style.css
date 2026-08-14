@@ -8,7 +8,6 @@
   --border-color: #e2e8f0;
   --border-hover: #cbd5e1;
   --table-header-bg: #f8fafc;
-  --table-row-alt: #f8fafc;
   --accent-color: #3b82f6; /* Bluetooth blue accent */
 }
 
@@ -126,10 +125,6 @@ td {
   font-size: 0.95rem;
   color: var(--text-primary);
   font-weight: 500;
-}
-
-tr:nth-child(even) td {
-  background-color: var(--table-row-alt);
 }
 
 td img {
