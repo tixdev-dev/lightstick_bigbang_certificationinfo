@@ -140,6 +140,24 @@ td img {
   object-fit: contain;
 }
 
+.logo-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.logo-group img {
+  margin: 0;
+}
+
+.logo-sep {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
 /* Footer Section */
 .footer {
   text-align: center;

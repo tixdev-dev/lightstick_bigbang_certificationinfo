@@ -50,30 +50,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 로고 이미지 셀
         const tdLogo = document.createElement("td");
+        const logoNames = certName.split(" / ").map((n) => n.trim());
+        const logoFiles = logoFile
+          .split(" / ")
+          .map((f) => f.trim())
+          .filter((f) => f.length > 0);
 
-        // 텍스트 배지 생성 함수
-        const createTextBadge = () => {
+        const createTextBadge = (label) => {
           const badge = document.createElement("span");
           badge.className = "logo-text-badge";
-          badge.textContent = certName;
+          badge.textContent = label || certName;
           return badge;
         };
 
-        if (!logoFile || logoFile === "-") {
-          // 로고 파일명이 '-' 인 경우 바로 텍스트 배지 생성
-          tdLogo.appendChild(createTextBadge());
-        } else {
+        const appendLogo = (container, file, label) => {
+          if (!file || file === "-") {
+            container.appendChild(createTextBadge(label));
+            return;
+          }
+
           const img = document.createElement("img");
-          img.src = "images/" + logoFile;
-          img.alt = certInfo;
-
-          // 이미지 파일 로드 에러 처리 (텍스트 배지로 대체)
+          img.src = "images/" + file;
+          img.alt = label || certInfo;
           img.onerror = () => {
-            tdLogo.innerHTML = ""; // 이미지 비우기
-            tdLogo.appendChild(createTextBadge());
+            img.replaceWith(createTextBadge(label));
           };
+          container.appendChild(img);
+        };
 
-          tdLogo.appendChild(img);
+        if (logoFiles.length <= 1) {
+          appendLogo(tdLogo, logoFiles[0] || "-", logoNames[0] || certName);
+        } else {
+          const group = document.createElement("div");
+          group.className = "logo-group";
+          logoFiles.forEach((file, idx) => {
+            if (idx > 0) {
+              const sep = document.createElement("span");
+              sep.className = "logo-sep";
+              sep.textContent = "/";
+              group.appendChild(sep);
+            }
+            appendLogo(group, file, logoNames[idx] || certName);
+          });
+          tdLogo.appendChild(group);
         }
 
         row.appendChild(tdCert);
